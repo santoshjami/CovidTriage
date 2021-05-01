@@ -1,52 +1,162 @@
-<h3>User Registration</h3>
-<form [formGroup]="registerForm" (ngSubmit)="onFormSubmit()">
+<h2>Covid Triage Volunteer Form</h2>
+<form [formGroup]="registerForm" (ngSubmit)="onFormSubmit(registerForm.value)">
   <div class="form-group">
-    <label for="firstName">First Name</label>
-    <input type="text" formControlName="firstName" class="form-control"
-      [ngClass]="{ 'is-invalid': submitted && fval.firstName.errors }" placeholder="Enter First Name here" />
-    <div *ngIf="submitted && fval.firstName.errors" class="invalid-feedback">
-      <div *ngIf="fval.firstName.errors.required">First Name is required</div>
+    <div>
+      <mat-form-field class="example-full-width">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher"
+          placeholder="Ex. pat@example.com">
+        <mat-error *ngIf="fval.email.hasError('email') && !fval.email.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="fval.email.hasError('required')">
+          Required
+        </mat-error>
+      </mat-form-field>
     </div>
-  </div>
-
-  <div class="form-group">
-    <label for="lastName">Last Name</label>
-    <input type="text" formControlName="lastName" class="form-control" placeholder="Enter Last Name here" />
-  </div>
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input type="text" formControlName="email" class="form-control"
-      [ngClass]="{ 'is-invalid': submitted && fval.email.errors }" placeholder="Enter email here" />
-    <div *ngIf="submitted && fval.email.errors" class="invalid-feedback">
-      <div *ngIf="fval.email.errors.required">Email is required</div>
-      <div *ngIf="fval.email.errors.email">Enter valid email address</div>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="email">Phone</label>
-    <input type="text" formControlName="phone" class="form-control"
-      [ngClass]="{ 'is-invalid': submitted && fval.phone.errors }" placeholder="Enter Phone here" />
-    <div *ngIf="submitted && fval.phone.errors" class="invalid-feedback">
-      <div *ngIf="fval.phone.errors.required">Phone is required</div>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="email">Password</label>
-    <input type="password" formControlName="password" class="form-control"
-      [ngClass]="{ 'is-invalid': submitted && fval.password.errors }" placeholder="Enter Password here" />
-    <div *ngIf="submitted && fval.password.errors" class="invalid-feedback">
-      <div *ngIf="fval.password.errors.required">Password is required</div>
-      <div *ngIf="fval.password.errors.minlength">Password must be at least 6 characters</div>
+    <div>
+      <mat-form-field class="form-element">
+        <input matInput placeholder="firstName" formControlName="firstName">
+        <mat-error *ngIf="!fval.firstName.valid && fval.firstName.touched">
+          Required
+        </mat-error>
+      </mat-form-field>
     </div>
 
-  </div>
+    <div>
+      <mat-form-field class="form-element">
+        <input matInput placeholder="lastName" formControlName="lastName">
+        <mat-error *ngIf="!fval.lastName.valid && fval.lastName.touched">
+          Required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-select placeholder="Select Gender" formControlName="gender" [(value)]="selectedGender" required>
+          <mat-option *ngFor="let gender of genders" [value]="gender">{{gender}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    </div>
+    <div>
+      <mat-form-field class="form-element">
+        <mat-label>Phone</mat-label>
+        <span matPrefix>+91 &nbsp;</span>
+        <input type="tel" matInput placeholder="555-555-5555" formControlName="phone">
+        <mat-icon matSuffix>mode_edit</mat-icon>
+        <mat-error *ngIf="!fval.phone.valid && fval.phone.touched">
+          Required
+        </mat-error>
+      </mat-form-field>
+    </div>
+  <div>
+    <div>
+      <h3 class="example-h3">Educational Qualification</h3>
+      <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+        formControlName="specialization" required>
+        <mat-radio-button class="example-radio-button" *ngFor="let qualification of qualification"
+          [value]="qualification">
+          {{qualification}}
+        </mat-radio-button>
+      </mat-radio-group>
 
-  <div class="form-group">
-    <button [disabled]="loading" class="btn btn-primary">
-      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-      Register
-    </button>
-    <a routerLink="/login" class="btn btn-link">Login to continue</a>
+      <h3 class="example-h3">Current Location</h3>
+      <div>
+        <mat-radio-group aria-label="Current Location" formControlName="currentLocation" required>
+          <mat-radio-button value="1">Bengaluru</mat-radio-button>
+          <mat-radio-button value="2">Out of Bengaluru</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <h3 class="example-h3">Zone</h3>
+      <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" formControlName="zone" required>
+        <mat-radio-button class="example-radio-button" *ngFor="let zone of zones" [value]="zone">
+          {{zone}}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <mat-card class="example-card">
+        <mat-card-header>
+          <mat-card-title>Address</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="form-element" required>
+            <input matInput placeholder="lineAddress" formControlName="lineAddress">
+            <mat-error *ngIf="!fval.lineAddress.valid && fval.lineAddress.touched">
+              Required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="form-element" required>
+            <input matInput placeholder="city" formControlName="city">
+            <mat-error *ngIf="!fval.city.valid && fval.city.touched">
+              Required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="form-element" required>
+            <input matInput placeholder="wardNumber" formControlName="wardNumber">
+            <mat-error *ngIf="!fval.wardNumber.valid && fval.wardNumber.touched">
+              Required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="form-element" required>
+            <input matInput placeholder="state" formControlName="state">
+            <mat-error *ngIf="!fval.state.valid && fval.state.touched">
+              Required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="form-element" required>
+            <input matInput placeholder="pinCode" formControlName="pinCode">
+            <mat-error *ngIf="!fval.pinCode.valid && fval.pinCode.touched">
+              Required
+            </mat-error>
+          </mat-form-field>
+        </mat-card-content>
+
+      </mat-card>
+
+
+    </div>
+  </div>
+  <div>
+    <div>
+      <h3 class="example-h3">Which of the following shifts can you commit to for volunteering? (Select more than 1 if
+        relevant)</h3>
+      <mat-form-field required>
+        <mat-select placeholder="Select Shifts" formControlName="preferedTimeSlots" [(value)]="selectedShifts" multiple>
+          <mat-option *ngFor="let shift of shifts" [value]="shift">{{shift}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <h3 class="example-h3">How many days a week can you commit to? Please select all relevant options.</h3>
+      <mat-form-field required>
+        <mat-select placeholder="Select Days" formControlName="preferedDays" [(value)]="selectedDays" multiple>
+          <mat-option *ngFor="let day of days" [value]="day">{{day}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <h3 class="example-h3">Languages Known</h3>
+      <mat-form-field required>
+        <mat-select placeholder="Select Languages" formControlName="languages" [(value)]="selectedLanguages" multiple>
+          <mat-option *ngFor="let language of languages" [value]="language">{{language}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <h3 class="example-h3">Which mode of volunteering/verification are you willing to commit to?</h3>
+      <mat-radio-group aria-label="Select an option" formControlName="remoteWork">
+        <mat-radio-button  value="1">Remote Work </mat-radio-button>
+        <mat-radio-button  value="2">Field Work</mat-radio-button>
+      </mat-radio-group>
+
+    </div>
+
+
+    <div class="form-group">
+      <button mat-button>Cancel</button>
+      <button mat-button type ="submit" color="primary">Register</button>
+    </div>
   </div>
 </form>
