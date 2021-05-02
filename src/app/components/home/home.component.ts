@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
+import { UserService } from '../Services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,8 @@ export class HomeComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private socialAuthService: SocialAuthService,
     private route: ActivatedRoute,
-    private router: Router) {}
+    private router: Router,
+    private userService: UserService) {}
 
   ngOnInit() {
     this.reactiveForm = this.fb.group({
@@ -29,6 +31,15 @@ export class HomeComponent implements OnInit {
       this.user = user;
       this.isSignedin = (user != null);
       console.log(this.user);
+      if( this.isSignedin)
+      {
+        this.userService.getUserDetails(user.email)
+        .subscribe((data: any) => {
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("permission", data.permission);
+         this.router.navigate(['/signUp']);
+        }); 
+      }
     });
   }
 
