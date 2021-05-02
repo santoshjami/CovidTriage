@@ -1,2 +1,3 @@
 <h3>Covid Triage</h3>
-<router-outlet></router-outlet>
+<div *ngIf="isAuthenticated"><app-side-nav>  </app-side-nav></div>
+<div *ngIf="!isAuthenticated"><app-home></app-home></div>
