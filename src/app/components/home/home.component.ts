@@ -33,12 +33,18 @@ export class HomeComponent implements OnInit {
       console.log(this.user);
       if( this.isSignedin)
       {
+        localStorage.setItem("gUser", JSON.stringify(this.user));
         this.userService.getUserDetails(user.email)
         .subscribe((data: any) => {
           localStorage.setItem("email", data.email);
           localStorage.setItem("permission", data.permission);
-         this.router.navigate(['/signUp']);
+          this.router.navigate(['/register']);
+        },(error:any)=>{
+          this.signUp();
         }); 
+      }
+      else{
+        localStorage.removeItem("gUser");
       }
     });
   }
@@ -48,6 +54,7 @@ export class HomeComponent implements OnInit {
   }
 
   logout(): void {
+    localStorage.removeItem("gUser");
     this.socialAuthService.signOut();
   }
 

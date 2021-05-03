@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../Services/user.service';
 import {
   FormBuilder,
   FormControl,
@@ -16,7 +17,10 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./sign-up.component.css'],
 })
 export class SignUpComponent implements OnInit {
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder,
+    private router: Router,
+    private userService: UserService) {
+  }
 
   registerForm!: FormGroup;
   loading = false;
@@ -117,6 +121,7 @@ export class SignUpComponent implements OnInit {
       city: formValues.city,
       state: formValues.state,
       pinCode: formValues.pinCode,
+      zone: formValues.zone,
     };
     let isRemoteWork: boolean = formValues.remoteWork === "1" ? true : false;
     let isFieldWork: boolean = !isRemoteWork;
@@ -133,11 +138,17 @@ export class SignUpComponent implements OnInit {
       preferedDays: formValues.preferedDays,
       languages: formValues.languages,
       remoteWork: isRemoteWork,
-      fieldWork: isFieldWork,
-      zone: formValues.zone,
+      fieldWork: isFieldWork
     };
 
-    console.log(formData);
+    this.userService.saveUserData(formData).subscribe((user:any) => {
+      var isSignedin = (user != null);
+      if( isSignedin)
+      {
+        localStorage.setItem("email", user.email);
+        localStorage.setItem("permission", user.permission);
+        this.router.navigate(['/register']);
+      }});
   }
 }
 

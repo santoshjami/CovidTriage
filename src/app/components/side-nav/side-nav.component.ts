@@ -11,14 +11,14 @@ export class SideNavComponent implements OnInit {
   user!: SocialUser;
   isSignedin!: boolean;
 
-  ngOnInit(): void {
-    this.router.navigate(['/signUp']);
+  checked: boolean = false;
 
-  };
   constructor(private socialAuthService: SocialAuthService, private route: ActivatedRoute,
     private router: Router) {
   }
 
-  
-  
+  ngOnInit(): void {
+    //this.router.navigate(['/signUp']);
+  };
+
 }

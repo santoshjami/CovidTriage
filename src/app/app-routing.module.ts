@@ -9,7 +9,7 @@ import {
 import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
 
 const routes: Routes = [
-  { path : 'signUp', component : SignUpComponent, canActivate: [AuthGuard], data: { roles: ["VOLUNTEER"] } },
+  { path : 'signUp', component : SignUpComponent },
   { path : '', component : HomeComponent },
   { path : 'register', component : SideNavComponent, canActivate: [AuthGuard], data: { roles: ["VOLUNTEER", "HEALTHWORKER", "HEALTHCOORDINATOR"] } },
   { path : 'accessDenied', component: AccessDeniedComponent, canActivate: [AuthGuard]}
